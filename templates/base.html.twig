@@ -38,6 +38,8 @@
                 <a class="navbar-brand" href="{{ path('app_index_index') }}">
                     Blog
                 </a>
+                {# affiche le rendu de la méthode menu() de CategoryController #}
+                {{ render(controller('App\\Controller\\CategoryController::menu')) }}
                 <ul class="navbar-nav">
                     {# app.user = l'utilisateur connecté #}
                     {% if app.user is null %}

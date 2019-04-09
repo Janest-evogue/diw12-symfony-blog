@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ArticleRepository")
@@ -18,11 +19,15 @@ class Article
 
     /**
      * @ORM\Column(type="string", length=255)
+     *
+     * @Assert\NotBlank(message="Le titre est obligatoire")
      */
     private $title;
 
     /**
      * @ORM\Column(type="text")
+     *
+     * @Assert\NotBlank(message="Le contenu est obligatoire")
      */
     private $content;
 
@@ -32,16 +37,31 @@ class Article
     private $publicationDate;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="articles")
+     * Le fetch="EAGER" fait que quand on requête les articles, une jointure est faite sur
+     * la table category
+     *
+     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="articles", fetch="EAGER")
      * @ORM\JoinColumn(nullable=false)
+     *
+     * @Assert\NotBlank(message="La catégorie est obligatoire")
      */
     private $category;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="articles")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="articles", fetch="EAGER")
      * @ORM\JoinColumn(nullable=false)
      */
     private $author;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $image;
+
+    public function __construct()
+    {
+        $this->setPublicationDate(new \DateTime());
+    }
 
     public function getId(): ?int
     {
@@ -104,6 +124,25 @@ class Article
     public function setAuthor(?User $author): self
     {
         $this->author = $author;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    /**
+     * @param mixed $image
+     * @return Article
+     */
+    public function setImage($image)
+    {
+        $this->image = $image;
 
         return $this;
     }
