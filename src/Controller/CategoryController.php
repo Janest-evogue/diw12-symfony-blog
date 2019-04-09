@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Article;
 use App\Entity\Category;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -24,11 +25,22 @@ class CategoryController extends AbstractController
          * avec un lien vers une page article à créer dans un nouveau contrôleur
          * qui affiche le détail de l'article avec son image s'il en a une
          */
+        $repository = $this->getDoctrine()->getRepository(Article::class);
+        $articles = $repository->findBy(
+            [
+                'category' => $category
+            ],
+            [
+                'publicationDate' => 'DESC'
+            ],
+            3
+        );
 
         return $this->render(
             'category/index.html.twig',
             [
-                'category' => $category
+                'category' => $category,
+                'articles' => $articles
             ]
         );
     }

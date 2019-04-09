@@ -27,6 +27,12 @@ class ArticleController extends AbstractController
     public function index()
     {
         // afficher tous les articles dans un tableau HTML
+
+        /*
+         * Ajouter une colonne avec le nombre de commentaires
+         * qui soit un lien clicable vers une page qui liste les commentaires
+         * avec la possibilité de les supprimer
+         */
         $repository = $this->getDoctrine()->getRepository(Article::class);
         $articles = $repository->findBy([], ['publicationDate' => 'DESC']);
 
