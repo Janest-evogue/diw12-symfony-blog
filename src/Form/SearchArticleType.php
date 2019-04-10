@@ -20,7 +20,8 @@ class SearchArticleType extends AbstractType
                 'title',
                 TextType::class,
                 [
-                    'label' => 'Titre'
+                    'label' => 'Titre',
+                    'required' => false
                 ]
             )
             ->add(
@@ -30,21 +31,28 @@ class SearchArticleType extends AbstractType
                     'class' => Category::class,
                     'label' => 'Catégorie',
                     'placeholder' => 'Choisissez une catégorie',
-                    'choice_label' => 'name'
+                    'choice_label' => 'name',
+                    'required' => false
                 ]
             )
             ->add(
                 'start_date',
                 TextType::class,
                 [
-                    'label' => 'Date de début'
+                    'label' => 'Date de début',
+                    'required' => false,
+                    // pour ajouter une classe css au champ de formulaire
+                    'attr' => [
+                        'class' => 'datepicker'
+                    ]
                 ]
             )
             ->add(
                 'end_date',
                 TextType::class,
                 [
-                    'label' => 'Date de fin'
+                    'label' => 'Date de fin',
+                    'required' => false
                 ]
             )
         ;

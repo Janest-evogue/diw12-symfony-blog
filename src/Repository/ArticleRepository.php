@@ -19,6 +19,55 @@ class ArticleRepository extends ServiceEntityRepository
         parent::__construct($registry, Article::class);
     }
 
+    /**
+     * @param array $filters
+     * @return Article[]
+     */
+    public function search(array $filters = [])
+    {
+        dump($filters);
+        // constructeur de requête SQL
+        // le 'a' est l'alias de la table article dans la requête
+        $qb = $this->createQueryBuilder('a');
+
+        // tri par date de publication décroissante
+        $qb->orderBy('a.publicationDate', 'DESC');
+
+        if (!empty($filters['title'])) {
+            $qb
+                ->andWhere('a.title LIKE :title')
+                ->setParameter('title', '%' . $filters['title'] . '%')
+            ;
+        }
+
+        if (!empty($filters['start_date'])) {
+            $qb
+                ->andWhere('a.publicationDate >= :start_date')
+                ->setParameter('start_date', $filters['start_date'])
+            ;
+        }
+
+        if (!empty($filters['end_date'])) {
+            $qb
+                ->andWhere('a.publicationDate <= :end_date')
+                ->setParameter('end_date', $filters['end_date'])
+            ;
+        }
+
+        if (!empty($filters['category'])) {
+            $qb
+                ->andWhere('a.category = :category')
+                ->setParameter('category', $filters['category'])
+            ;
+        }
+
+        // la requête générée
+        $query = $qb->getQuery();
+
+        // on retourne le résultat de la requête
+        return $query->getResult();
+    }
+
     // /**
     //  * @return Article[] Returns an array of Article objects
     //  */
