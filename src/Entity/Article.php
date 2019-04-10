@@ -57,11 +57,15 @@ class Article
 
     /**
      * @ORM\Column(type="string", nullable=true)
+     *
+     * @Assert\Image(mimeTypesMessage="Le fichier doit être une image",
+     *      maxSize="200k", maxSizeMessage="L'image ne doit pas faire plus de 200Ko")
      */
     private $image;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="article")
+     * cascade={"remove"} : quand on supprime un article, ça supprime ses commentaires
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="article", cascade={"remove"})
      * Les commentaires seront triés par date de publication décroissante
      * en lazy loading
      * @ORM\OrderBy({"publicationDate": "DESC"})

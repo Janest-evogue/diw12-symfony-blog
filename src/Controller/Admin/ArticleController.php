@@ -9,7 +9,9 @@ use App\Form\ArticleType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -162,11 +164,47 @@ class ArticleController extends AbstractController
     {
         $em = $this->getDoctrine()->getManager();
 
+        // si l'article a une image, on la supprime
+        if (!is_null($article->getImage())) {
+            unlink($this->getParameter('upload_dir') . $article->getImage());
+        }
+
         $em->remove($article);
         $em->flush();
 
         $this->addFlash('success', "L'article est supprimé");
 
         return $this->redirectToRoute('app_admin_article_index');
+    }
+
+    /**
+     * @Route("/ajax/content/{id}")
+     */
+    public function ajaxContent(Request $request, Article $article)
+    {
+        // si la page a été appelée en AJAX
+        if ($request->isXmlHttpRequest()) {
+            // retour en texte brut
+//             return new Response(nl2br($article->getContent()));
+
+            // retour en JSON
+//        $response = [
+//            'content' => nl2br($article->getContent())
+//        ];
+//
+//        return new JsonResponse($response);
+
+
+            // retour du rendu d'un template twig
+            return $this->render(
+                'admin/article/ajax_content.html.twig',
+                [
+                    'article' => $article
+                ]
+            );
+        } else {
+            throw new NotFoundHttpException();
+        }
+
     }
 }

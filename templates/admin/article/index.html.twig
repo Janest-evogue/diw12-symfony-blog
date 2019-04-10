@@ -10,6 +10,8 @@
         </a>
     </p>
 
+
+
     <table class="table">
         <tr>
             <th>Id</th>
@@ -18,7 +20,7 @@
             <th>Catégorie</th>
             <th>Auteur</th>
             <th>Commentaires</th>
-            <th width="250px"></th>
+            <th width="300px"></th>
         </tr>
         {% for article in articles %}
             <tr>
@@ -37,12 +39,58 @@
                        href="{{ path('app_admin_article_edit', {'id': article.id}) }}">
                         Modifier
                     </a>
-                    <a class="btn btn-danger"
+                    <a class="btn btn-danger btn-delete"
                        href="{{ path('app_admin_article_delete', {'id': article.id}) }}">
                         Supprimer
+                    </a>
+                    <a href="{{ path('app_admin_article_ajaxcontent', {'id': article.id}) }}"
+                       class="btn btn-outline-secondary btn-article-content">
+                        Aperçu
                     </a>
                 </td>
             </tr>
         {% endfor %}
     </table>
+
+    {# modal confirmation suppression #}
+    <div class="modal" tabindex="-1" role="dialog" id="modal-confirm-delete">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Etes-vous sûr.e de vouloir supprimer cet article&nbsp;?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary btn-confirm-delete">Oui</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# modal aperçu du contenu #}
+    <div class="modal" tabindex="-1" role="dialog" id="modal-article-content">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Aperçu</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {# reprend le contenu du block javascripts de base.html.twig #}
+    {{ parent() }}
+    <script src="{{ asset('js/admin_article.js') }}"></script>
 {% endblock %}
