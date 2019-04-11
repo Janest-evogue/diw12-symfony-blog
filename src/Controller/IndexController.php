@@ -49,7 +49,7 @@ class IndexController extends AbstractController
                     ->setSubject('Nouveau message sur votre blog')
                     ->setFrom('contact@blog.fr')
                     ->setTo('contact@blog.fr')
-                    ->setBody($mailBody)
+                    ->setBody($mailBody, 'text/html')
                     ->setReplyTo($data['email'])
                 ;
 
